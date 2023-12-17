@@ -80,7 +80,6 @@ class EmpreinteCarboneService:
         date_visionnage_arrondie = date_visionnage.replace(minute = 0, second = 0, microsecond = 0)
         # Recherche de l'indice de la date actuelle arrondie à l'inférieure
         indice_date_visionnage = next((i for i, date in enumerate(dates) if date == date_visionnage_arrondie), None)
-        print(indice_date_visionnage)
         l = []
         ecart_date = (dates[indice_date_visionnage + 1] - date_visionnage).seconds // 60 % 60
         if date_visionnage == date_visionnage_arrondie:
