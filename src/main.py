@@ -10,7 +10,13 @@ if __name__ == "__main__":
     # On charge les variables d'envionnement
     dotenv.load_dotenv(override=True)
 
-    vue_courante = AccueilVue("Bienvenue")
+    vue_courante = AccueilVue("""
+    -----------------------------------
+    |                                 |
+    |    Bienvenue sur Greenstream    |      
+    |                                 |
+    -----------------------------------
+    """)
     nb_erreurs = 0
 
     while vue_courante:
@@ -31,5 +37,10 @@ if __name__ == "__main__":
             )
 
     # Lorsque l on quitte l application
-    print("---------------------------------")
-    print("Au revoir")
+    print("""
+    -----------------------------------
+    |                                 |
+    |    A bientôt sur Greenstream    |      
+    |                                 |
+    -----------------------------------
+    """)

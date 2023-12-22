@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import patch
-from datetime import datetime
 from service.empreinte_carbone_service import EmpreinteCarboneService
 from business_object.info_video import InfoVideo
 from business_object.zone_geographique import ZoneGeographique

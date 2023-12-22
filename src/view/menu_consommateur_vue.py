@@ -18,7 +18,8 @@ class MenuConsommateurVue(VueAbstraite):
     """
 
     def __init__(self, cle, message="") -> None:
-        super().__init__(message, cle)
+        self.cle = cle
+        super().__init__(message)
         self.questions = [
             {
                 "type": "list",
@@ -45,37 +46,41 @@ class MenuConsommateurVue(VueAbstraite):
             return AccueilVue()
 
         elif reponse["choix"] == "Estimer son empreinte carbone":
-            from view.empreinte_carbonne_vue import EmpreinteCarboneVue
-            return EmpreinteCarboneVue()
+            from view.empreinte_carbone_vue import EmpreinteCarboneVue
+            return EmpreinteCarboneVue(self.cle)
 
         elif reponse["choix"] == "Empreinte moyenne générée":
             from service.empreinte_carbone_service import EmpreinteCarboneService
             empreinte = EmpreinteCarboneService().empreinte_moyenne(self.cle)
             message = f'Votre empreinte carbone moyenne générée est de {empreinte} gCO2eq'
-            return MenuConsommateurVue(message)
+            return MenuConsommateurVue(self.cle, message)
 
         elif reponse["choix"] == "Empreinte totale générée":
             from service.empreinte_carbone_service import EmpreinteCarboneService
             empreinte = EmpreinteCarboneService().empreinte_total(self.cle)
             message = f'Votre empreinte carbone totale générée est de {empreinte} gCO2eq'
-            return MenuConsommateurVue(message)
+            return MenuConsommateurVue(self.cle, message)
 
         elif reponse["choix"] == "Voir son historique":
             from service.table.historique_consommateur_service import HistoriqueConsommateurService
             historique = HistoriqueConsommateurService().voir(self.cle)
-            list_model = [{
-        "info_video": InfoVideoModel(duree = requete["duree"], resolution = requete["resolution"], type_connexion = requete["type_connexion"],
-                            materiel = requete["materiel"], date_visionnage = requete["date_visionnage"],
-                            localisation = ZoneGeographiqueModel(ville = requete["ville"], pays = requete["pays"])),
-        "empreinte_carbone": requete["empreinte_carbone"],
-        "date_requete": requete["date_requete"]
-        } for requete in historique]
-            return MenuConsommateurVue(list_model)
+            message = "Votre historique:\n\n"
+            for requete in historique:
+                date_requete = requete["date_requete"]
+                empreinte = requete["empreinte_carbone"]
+                ville = requete["ville"]
+                date_visionnage = requete["date_visionnage"]
+                duree = requete["duree"]
+                resolution = requete["resolution"]
+                type_connexion = requete["type_connexion"]
+                materiel = requete["materiel"]
+                message += f"Date Requête: {date_requete}, Empreinte Carbone: {empreinte} gCO2eq, Localisation: {ville}, Date Visionnage: {date_visionnage},\n Durée: {duree}, Résolution: {resolution}, Type de Connexion: {type_connexion}, Matériel: {materiel}\n\n"
+            return MenuConsommateurVue(self.cle, message)
 
         elif reponse["choix"] == "Supprimer son historique":
             from service.table.historique_consommateur_service import HistoriqueConsommateurService
 
             resultat = HistoriqueConsommateurService().supprimer(self.cle)
             if resultat:
-                return MenuConsommateurVue("L'historique a bien été supprimé")
-            return MenuConsommateurVue("??????")
+                return MenuConsommateurVue(self.cle, "Votre historique a bien été supprimé")
+            return MenuConsommateurVue(self.cle, "Votre historique était déjà vide")

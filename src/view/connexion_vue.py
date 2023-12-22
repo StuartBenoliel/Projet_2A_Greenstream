@@ -1,6 +1,8 @@
 from InquirerPy import prompt
 import dotenv
+import os
 from view.vue_abstraite import VueAbstraite
+from service.table.cles_api_service import ClesApiService
 
 dotenv.load_dotenv(override=True)
 token_administrateur = os.environ.get('token_admin')
@@ -33,7 +35,7 @@ class ConnexionVue(VueAbstraite):
         if reponse["utilisateur"] == "Administrateur" and reponse["cle"] == token_administrateur:
             message = f'Vous êtes connecté en tant que {reponse["utilisateur"]} via la clé API : {reponse["cle"]}'
             from view.menu_administrateur_vue import MenuAdministrateurVue
-            return MenuAdministrateurVue(message)
+            return MenuAdministrateurVue(reponse["cle"], message)
 
         try :
             cle_hachee = ClesApiService().trouver_cle_api(reponse["utilisateur"], reponse["cle"])
@@ -45,8 +47,8 @@ class ConnexionVue(VueAbstraite):
         message = f'Vous êtes connecté en tant que {reponse["utilisateur"]} via la clé API : {reponse["cle"]}'
         if reponse["utilisateur"] == "Fournisseur":
             from view.menu_fournisseur_vue import MenuFournisseurVue
-            return MenuFournisseurVue(message, cle=cle_hachee)
+            return MenuFournisseurVue(cle_hachee, message)
 
         if reponse["utilisateur"] == "Consommateur":
             from view.menu_consommateur_vue import MenuConsommateurVue
-            return MenuConsommateurVue(message, cle=cle_hachee)
+            return MenuConsommateurVue(cle_hachee, message)

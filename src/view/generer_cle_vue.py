@@ -23,5 +23,5 @@ class GenererCleVue(VueAbstraite):
     def choisir_menu(self):
         reponse = prompt(self.questions)
         nouvelle_cle = ClesApiService().generer_cle_api(reponse["utilisateur"])  
-        message = f'Votre clé API de {reponse["utilisateur"]} : {nouvelle_cle}'
+        message = f'Votre clé API de {reponse["utilisateur"]} : {nouvelle_cle["cle_api"]}'
         return AccueilVue(message)

@@ -18,7 +18,8 @@ class MenuFournisseurVue(VueAbstraite):
     """
 
     def __init__(self, cle, message="") -> None:
-        super().__init__(message, cle)
+        self.cle = cle
+        super().__init__(message)
         self.questions = [
             {
                 "type": "list",
@@ -44,10 +45,9 @@ class MenuFournisseurVue(VueAbstraite):
             return AccueilVue()
 
         elif reponse["choix"] == "Voir la liste de serveurs":
-            from service.table.serveurs_service import ServeursService
-            list_serveurs = ServeursService().voir()
-            return MenuConsommateurVue(list_serveurs)
+            from view.serveurs_vue import ServeursVue
+            return ServeursVue(self.cle)
 
         elif reponse["choix"] == "Voir les serveurs optimaux conseillés par Greenstream":
             from view.offre_cloud_vue import OffreCloudVue
-            return OffreCloudVue()
+            return OffreCloudVue(self.cle)
